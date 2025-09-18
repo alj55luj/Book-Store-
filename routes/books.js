@@ -11,8 +11,23 @@ const {verifyTokenAndAdmin} = require('../middlewares/verifyToken');
 @access public
 */ 
 router.get("/",asyncHandler(
+  //Comparison Query Operators
   async(req,res)=>{//callback func
-  const books=await Book.find().populate("author",["firstName","lastName","_id"]);//to get author details instead of id
+    const {minPrice,maxPrice}=req.query;
+let books;
+    if(minPrice && maxPrice){ 
+   books=await Book.find({price:{$gte:minPrice,$lte:maxPrice}})//equal ,  , gt greater than, gte greater than equal, lt less than, lte less than equal
+  .populate("author",[
+    "firstName",
+    "lastName",
+    "_id"]);//to get author details instead of id
+    }else{
+books=await Book.find().populate("author",[
+  "firstName",
+  "lastName",
+  "_id"]);//to get author details instead of id
+   
+    }
   res.status(200).json(books);//it will return 
 }));
 /*
@@ -79,7 +94,7 @@ cover:req.body.cover
 },{new:true})
 res.status(200).json(updatedBook);
 }));
-
+ 
 /*
 @desc Delete New book 
 @route /api/books/:id

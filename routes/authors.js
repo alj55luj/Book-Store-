@@ -12,7 +12,8 @@ const {verifyTokenAndAdmin}=require('../middlewares/verifyToken');
 router.get("/",asyncHandler(//منرتاح من try & catch
   async(req,res)=>{
   
-     const authorList = await Author.find();//sort({firstName:1}).select("firstName  lastName -_id");//- remove id
+     const authorList = await Author.find().skip(2).limit(2);//سكيب بسبح اول تنتين/limit get the 2 after the skip
+     // /sort({firstName:1}).select("firstName  lastName -_id");//- remove id
   //مشان ياخد authors  من داتا بيز//sort 1 تصاعدي -1 تنازلي//select يحدد شو الحقول اللي بدي اياها
 res.status(200).json(authorList);
   }
